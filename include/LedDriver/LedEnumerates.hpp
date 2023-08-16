@@ -13,7 +13,10 @@ enum class LedDriver_LedModes
 {
     off,
     preview,
-    live
+    live,
+    contentLaterUse,
+    wifiNotConnected,
+    configMode,
 };
 
 /**

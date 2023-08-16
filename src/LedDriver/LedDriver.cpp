@@ -55,8 +55,26 @@ void LedDriver_setMode(LedDriver_LedModes mode)
             frontSegment.color = LedDriver_liveColor;
             backSegment.color = LedDriver_liveColor;
             LedDriver_updateSegment(frontSegment, backSegment);
-
             break;
+
+        case LedDriver_LedModes::contentLaterUse:
+            frontSegment.color = LedDriver_contentLaterUseColor;
+            backSegment.color = LedDriver_contentLaterUseColor;
+            LedDriver_updateSegment(frontSegment, backSegment);
+            break;
+
+        case LedDriver_LedModes::wifiNotConnected:
+            frontSegment.color = LedDriver_wifiNotConnectedColor;
+            backSegment.color = LedDriver_offColor;
+            LedDriver_updateSegment(frontSegment, backSegment);
+            break;
+
+        case LedDriver_LedModes::configMode:
+            frontSegment.color = LedDriver_configModeColor;
+            backSegment.color = LedDriver_offColor;
+            LedDriver_updateSegment(frontSegment, backSegment);
+            break;
+
 
         default:
             break;
