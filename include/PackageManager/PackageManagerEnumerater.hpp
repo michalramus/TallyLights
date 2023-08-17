@@ -18,16 +18,4 @@ enum class PackageManager_PackageTypes
     incorrect,
 };
 
-/**
- * @enum PackageManager_LedBrightness 
- * @brief Predefined brightnesses for the led
- */
-enum class PackageManager_LedBrightness
-{
-    off = 0,
-    oneSeventh = 36,
-    half = 128,
-    full = 255,
-};
-
 const char CONFIG_PACKAGE_BEGIN[] = {'C', 'O', 'N', 'F', '+'}; //all config packages begin with this

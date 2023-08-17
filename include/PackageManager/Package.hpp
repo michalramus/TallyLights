@@ -1,10 +1,10 @@
 /**
  * @file Package.hpp
- * @brief Package that was parsed 
+ * @brief Package that was parsed
  */
 
-#include "PackageManagerEnumerater.hpp"
 #include "LedDriver/LedEnumerates.hpp"
+#include "PackageManagerEnumerater.hpp"
 
 #include <cstdint>
 
@@ -12,7 +12,7 @@
 
 /**
  * @struct Package
- * @brief Package that was parsed 
+ * @brief Package that was parsed
  */
 struct Package
 {
@@ -21,6 +21,5 @@ struct Package
     bool backLedEnable;
     LedDriver_LedModes frontLedMode;
     LedDriver_LedModes backLedMode;
-    PackageManager_LedBrightness brightness;
+    LedDriver_LedBrightness brightness;
 };
-

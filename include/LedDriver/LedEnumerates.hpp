@@ -28,3 +28,15 @@ enum class LedDriver_LedSegments
     front,
     back,
 };
+
+/**
+ * @enum LedDriver_LedBrightness 
+ * @brief Predefined brightnesses for the led
+ */
+enum class LedDriver_LedBrightness
+{
+    off = 0,
+    oneSeventh = 36,
+    half = 128,
+    full = 255,
+};
