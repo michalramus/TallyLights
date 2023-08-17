@@ -19,7 +19,8 @@ struct Package
     uint16_t address;
     bool frontLedEnable;
     bool backLedEnable;
-    LedDriver_LedModes mode;
+    LedDriver_LedModes frontLedMode;
+    LedDriver_LedModes backLedMode;
     PackageManager_LedBrightness brightness;
 };
 
