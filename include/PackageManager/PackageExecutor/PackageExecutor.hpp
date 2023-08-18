@@ -10,11 +10,11 @@
 #pragma once
 
 /**
- * @brief Initialize the package executor
+ * @brief Set the Tsl Address
  * 
  * @param address The address of the device
  */
-void PackageExecutor_Init(uint16_t address);
+void PackageExecutor_SetTslAddress(uint16_t address);
 
 /**
  * @brief Execute a package

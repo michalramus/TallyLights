@@ -11,7 +11,7 @@
 uint16_t _address = 0;
 //--------------------functions--------------------//
 
-void PackageExecutor_Init(uint16_t address) 
+void PackageExecutor_SetTslAddress(uint16_t address) 
 {
     _address = address;
 }
