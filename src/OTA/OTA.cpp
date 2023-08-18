@@ -30,6 +30,7 @@ void OTA_enterIntoOTA(uint16_t port, const char *password)
     ArduinoOTA.setPassword(password);
 
     ArduinoOTA.begin();
+    Serial.println("OTA ready");
 
     while (true)
     {

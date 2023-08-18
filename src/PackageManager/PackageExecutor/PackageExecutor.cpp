@@ -14,6 +14,7 @@ uint16_t _address = 0;
 void PackageExecutor_SetTslAddress(uint16_t address) 
 {
     _address = address;
+    Serial.println("TSL address set to: " + String(address));
 }
 
 void PackageExecutor_Execute(Package package)
