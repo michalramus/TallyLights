@@ -13,6 +13,7 @@ PackageManager_PackageTypes PackageManager_ResolvePackageType(uint8_t package[],
 {
     if(packageSize <=2)
     {
+        Serial.println("Incorrect package - ignored");
         return PackageManager_PackageTypes::incorrect;
     }
 
