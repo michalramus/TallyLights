@@ -18,7 +18,7 @@
 
 Cheap tally lights which support [TSL 3.1 and 5.0 protocol.](tsl-umd-protocol.pdf) Software can be replaced by any other which works on WeMos D1 Mini. For example [vTally.](https://github.com/wifi-tally/wifi-tally)
 
-![Tally light](./images/TallyLight.jpg)
+![Tally light](./images/Tally.jpg)
 
 ## Features
 
