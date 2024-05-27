@@ -8,26 +8,26 @@ class Tally:
 
     def __init__(
         self,
-        IP: str,
+        ip: str,
         port: int,
         index: int,
         enable_front_light: bool = True,
         brightness: Brightness = Brightness.MAX,
     ):
-        """_summary_
+        """
 
         Args:
-            IP (str): IP address of tally
+            ip (str): IP address of tally
             port (int): Port which tally listens on
             index (int): Tally TSL index
             enableFrontLight (bool, optional): Enable or disable front light. Defaults to True.
             brightness (Brightness, optional): Set brightness. Defaults to Brightness.MAX.
         """
-        self.__IP = IP
-        self.__port = port
-        self.__index = index.to_bytes(2, "little")
-        self.__enableFrontLight = enable_front_light
-        self.__brightness = brightness
+        self._ip = ip
+        self._port = port
+        self._index = index.to_bytes(2, "little")
+        self._enableFrontLight = enable_front_light
+        self._brightness = brightness
 
     def set_color(self, color: Color) -> None:
         """Update Tally color
@@ -35,53 +35,53 @@ class Tally:
         Args:
             color (Color):
         """
-        self.__color = color
+        self._color = color
         print(
-            f"Tally index: {int.from_bytes(self.__index, 'little')}  Color: {self.__color}"
+            f"Tally index: {int.from_bytes(self._index, 'little')}  Color: {self._color}"
         )
 
         #prepare package
         control = int(color)  # RH Tally Lamp state
-        if self.__enable_front_light:
+        if self._enable_front_light:
             control = (int(color) << 2) | control  # Text Tally state
-        control = (int(self.__brightness) << 6) | control  # Brightness value
-        self.__control = control.to_bytes(2, "little")
+        control = (int(self._brightness) << 6) | control  # Brightness value
+        self._control = control.to_bytes(2, "little")
 
-        self.__send_UDP_package()
-        self.__send_UDP_package()
+        self._send_UDP_package()
+        self._send_UDP_package()
 
-    def __send_UDP_package(self) -> None:
+    def _send_UDP_package(self) -> None:
         package = (
-            self.__PACKAGE_SIZE
-            + self.__VERSION
-            + self.__FLAGS
-            + self.__SCREEN
-            + self.__index
-            + self.__control
-            + self.__LENGTH
+            self._PACKAGE_SIZE
+            + self._VERSION
+            + self._FLAGS
+            + self._SCREEN
+            + self._index
+            + self._control
+            + self._LENGTH
         )
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        res = sock.sendto(package, (self.__IP, self.__port))
+        res = sock.sendto(package, (self._ip, self._port))
         if res == -1:
             print(
-                f"Error during sending :(    Index: {int.from_bytes(self.__index, 'little')}, IP: {self.__IP}:{self.__port}"
+                f"Error during sending :(    Index: {int.from_bytes(self._index, 'little')}, IP: {self._ip}:{self._port}"
             )
 
     # Constants (see tsl docs)
-    __PACKAGE_SIZE = int(10).to_bytes(2, "little")
-    __VERSION = bytearray([0])
-    __FLAGS = bytearray([0])
-    __SCREEN = bytearray([0, 0])
-    __LENGTH = bytearray([0, 0])
+    _PACKAGE_SIZE = int(10).to_bytes(2, "little")
+    _VERSION = bytearray([0])
+    _FLAGS = bytearray([0])
+    _SCREEN = bytearray([0, 0])
+    _LENGTH = bytearray([0, 0])
 
-    __index = bytearray()  # Address of tally (see tsl docs)
-    __control = bytearray()  # Light state (see tsl docs)
+    _index = bytearray()  # Address of tally (see tsl docs)
+    _control = bytearray()  # Light state (see tsl docs)
 
-    __brightness: Brightness
-    __color: Color = Color.OFF
-    __enable_front_light: bool
+    _brightness: Brightness
+    _color: Color = Color.OFF
+    _enable_front_light: bool
 
     # Connection credentials
-    __IP: str
-    __port: int
+    _ip: str
+    _port: int
