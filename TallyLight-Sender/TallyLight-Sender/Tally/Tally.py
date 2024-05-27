@@ -1,8 +1,10 @@
 import socket
-from TallyEnums import Brightness, Color
+from Tally.TallyEnums import Brightness, Color
 
 
 class Tally:
+    """Tally Light representation
+    """
 
     def __init__(
         self,
@@ -12,6 +14,15 @@ class Tally:
         enableFrontLight: bool = True,
         brightness: Brightness = Brightness.MAX,
     ):
+        """_summary_
+
+        Args:
+            IP (str): IP address of tally
+            port (int): Port which tally listens on
+            index (int): Tally TSL index
+            enableFrontLight (bool, optional): Enable or disable front light. Defaults to True.
+            brightness (Brightness, optional): Set brightness. Defaults to Brightness.MAX.
+        """
         self.__IP = IP
         self.__port = port
         self.__index = index.to_bytes(2, "little")
@@ -19,6 +30,11 @@ class Tally:
         self.__brightness = brightness
 
     def SetColor(self, color: Color) -> None:
+        """Update Tally color
+
+        Args:
+            color (Color):
+        """
         self.__color = color
         print(
             f"Tally index: {int.from_bytes(self.__index, 'little')}  Color: {self.__color}"
