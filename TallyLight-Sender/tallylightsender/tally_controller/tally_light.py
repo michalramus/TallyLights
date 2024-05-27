@@ -1,5 +1,5 @@
 import socket
-from Tally.TallyEnums import Brightness, Color
+from tally_controller.tally_light_enums import Brightness, Color
 
 
 class Tally:
@@ -11,7 +11,7 @@ class Tally:
         IP: str,
         port: int,
         index: int,
-        enableFrontLight: bool = True,
+        enable_front_light: bool = True,
         brightness: Brightness = Brightness.MAX,
     ):
         """_summary_
@@ -26,10 +26,10 @@ class Tally:
         self.__IP = IP
         self.__port = port
         self.__index = index.to_bytes(2, "little")
-        self.__enableFrontLight = enableFrontLight
+        self.__enableFrontLight = enable_front_light
         self.__brightness = brightness
 
-    def SetColor(self, color: Color) -> None:
+    def set_color(self, color: Color) -> None:
         """Update Tally color
 
         Args:
@@ -42,15 +42,15 @@ class Tally:
 
         #prepare package
         control = int(color)  # RH Tally Lamp state
-        if self.__enableFrontLight:
+        if self.__enable_front_light:
             control = (int(color) << 2) | control  # Text Tally state
         control = (int(self.__brightness) << 6) | control  # Brightness value
         self.__control = control.to_bytes(2, "little")
 
-        self.__SendUDPPackage()
-        self.__SendUDPPackage()
+        self.__send_UDP_package()
+        self.__send_UDP_package()
 
-    def __SendUDPPackage(self) -> None:
+    def __send_UDP_package(self) -> None:
         package = (
             self.__PACKAGE_SIZE
             + self.__VERSION
@@ -80,7 +80,7 @@ class Tally:
 
     __brightness: Brightness
     __color: Color = Color.OFF
-    __enableFrontLight: bool
+    __enable_front_light: bool
 
     # Connection credentials
     __IP: str
