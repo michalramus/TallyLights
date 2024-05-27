@@ -20,7 +20,7 @@ programTally: tuple[str, Tally.Tally] | None = None  # Scene on program
 
 
 def main():
-    from Tally import Tally
+    from Tally import Tally  # I don't know why, but without it doesn't work
 
     print(f"Host: {host}:{port}")
     print("Connecting...")
@@ -35,7 +35,9 @@ def main():
     while True:  # Retry until connected
         try:
             global ce
-            ce = obs.EventClient(host=host, port=port, password=password, timeout=timeout)
+            ce = obs.EventClient(
+                host=host, port=port, password=password, timeout=timeout
+            )
             global cr
             cr = obs.ReqClient(host=host, port=port, password=password, timeout=timeout)
 
@@ -44,7 +46,7 @@ def main():
         else:
             break
 
-    # Set previewTally and programTally
+    # Set previewTally and programTally variables
     global programTally
     resp = cr.get_current_program_scene()
     scene_name = resp.scene_name
@@ -62,15 +64,10 @@ def main():
             previewTally = Tally
             break
 
+    # Register callbacks
     ce.callback.register(on_scene_transition_started)
     ce.callback.register(on_scene_transition_ended)
-    # ce.callback.register(on_current_preview_scene_changed)
     print("Connected 😄")
-
-    # GetVersion, returns a response object
-    # resp = cl.get_current_program_scene()
-    # # Access it's field as an attribute
-    # print(f"OBS Version: {resp.scene_name}")
 
 
 def on_scene_transition_started(data):
@@ -78,14 +75,10 @@ def on_scene_transition_started(data):
     resp = cr.get_current_program_scene()
     scene_name = resp.scene_name
 
-    found = False
     for Tally in tallies:
         if Tally[0] == scene_name:
             Tally[1].SetColor(TallyEnums.Color.RED)
-            # found = True
             break
-    # if (not found) and (programTally is not None):
-    #     programTally[1].SetColor(TallyEnums.Color.OFF)
 
 
 def on_scene_transition_ended(data):
@@ -98,9 +91,8 @@ def on_scene_transition_ended(data):
     found = False
     for Tally in tallies:
         if Tally[0] == scene_name:
-            if (previewTally is not None) and (
-                Tally[0] != previewTally[0]
-            ):  # Third scene goes to program; Second goes from program to preview; First scene is turned off from preview
+            # Third scene goes to program; Second goes from program to preview; First scene is turned off from preview
+            if (previewTally is not None) and (Tally[0] != previewTally[0]):
                 previewTally[1].SetColor(TallyEnums.Color.OFF)
 
             # Swap program and preview
@@ -111,27 +103,9 @@ def on_scene_transition_ended(data):
 
             found = True
             break
-    if not found:
+    if (not found) and (programTally is not None):
         programTally[1].SetColor(TallyEnums.Color.OFF)
         programTally = None
-
-
-# def on_current_preview_scene_changed(data):
-#     global previewTally
-
-#     if previewTally is not None:
-#         previewTally[1].SetColor(TallyEnums.Color.OFF)
-
-#     resp = cr.get_current_preview_scene()
-#     scene_name = resp.scene_name
-
-#     found = False
-#     for tally in tallies:
-#         if tally[0] == scene_name:
-#             previewTally = tally
-#             tally[1].SetColor(TallyEnums.Color.GREEN)
-#     if not found:
-#         previewTally = None
 
 
 if __name__ == "__main__":
@@ -139,11 +113,7 @@ if __name__ == "__main__":
     while True:
         time.sleep(30)
         try:
-            cr.get_current_program_scene()
+            cr.get_current_program_scene()  # check if connected
         except:
             print("Disconnected")
             main()
-
-
-
-    
