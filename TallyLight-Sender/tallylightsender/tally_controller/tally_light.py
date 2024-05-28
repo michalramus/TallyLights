@@ -17,17 +17,18 @@ class Tally:
         """
 
         Args:
-            ip (str): IP address of tally
+            ip (str): Tally light IP address
             port (int): Port which tally listens on
             index (int): Tally TSL index
-            enableFrontLight (bool, optional): Enable or disable front light. Defaults to True.
+            enable_front_light (bool, optional): Enable or disable front light. Defaults to True.
             brightness (Brightness, optional): Set brightness. Defaults to Brightness.MAX.
         """
         self._ip = ip
         self._port = port
         self._index = bytearray(index.to_bytes(2, "little"))
-        self._enableFrontLight = enable_front_light
-        self._brightness = brightness
+        self.enable_front_light = enable_front_light
+        self.brightness = brightness
+        self.color = Color.OFF
 
     def set_color(self, color: Color) -> None:
         """Update Tally color
@@ -35,29 +36,29 @@ class Tally:
         Args:
             color (Color):
         """
-        self._color = color
+        self.color = color
         print(
-            f"Tally index: {int.from_bytes(self._index, 'little')}  Color: {self._color}"
+            f"Tally index: {int.from_bytes(self._index, 'little')}  Color: {self.color}"
         )
 
         # prepare package
         control = int(color)  # RH Tally Lamp state
-        if self._enable_front_light:
+        if self.enable_front_light:
             control = (int(color) << 2) | control  # Text Tally state
-        control = (int(self._brightness) << 6) | control  # Brightness value
-        self._control = bytearray(control.to_bytes(2, "little"))
+        control = (int(self.brightness) << 6) | control  # Brightness value
+        control = bytearray(control.to_bytes(2, "little"))
 
-        self._send_UDP_package()
-        self._send_UDP_package()
+        self._send_UDP_package(control)
+        self._send_UDP_package(control)
 
-    def _send_UDP_package(self) -> None:
+    def _send_UDP_package(self, control: bytearray) -> None:
         package = (
             self._PACKAGE_SIZE
             + self._VERSION
             + self._FLAGS
             + self._SCREEN
             + self._index
-            + self._control
+            + control
             + self._LENGTH
         )
 
@@ -75,13 +76,3 @@ class Tally:
     _SCREEN = bytearray([0, 0])
     _LENGTH = bytearray([0, 0])
 
-    _index = bytearray()  # Address of tally (see tsl docs)
-    _control = bytearray()  # Light state (see tsl docs)
-
-    _brightness: Brightness
-    _color: Color = Color.OFF
-    _enable_front_light: bool
-
-    # Connection credentials
-    _ip: str
-    _port: int
