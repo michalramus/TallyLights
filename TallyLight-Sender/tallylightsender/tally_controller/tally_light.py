@@ -25,7 +25,7 @@ class Tally:
         """
         self._ip = ip
         self._port = port
-        self._index = index.to_bytes(2, "little")
+        self._index = bytearray(index.to_bytes(2, "little"))
         self._enableFrontLight = enable_front_light
         self._brightness = brightness
 
@@ -45,7 +45,7 @@ class Tally:
         if self._enable_front_light:
             control = (int(color) << 2) | control  # Text Tally state
         control = (int(self._brightness) << 6) | control  # Brightness value
-        self._control = control.to_bytes(2, "little")
+        self._control = bytearray(control.to_bytes(2, "little"))
 
         self._send_UDP_package()
         self._send_UDP_package()
