@@ -3,11 +3,6 @@ import time
 import obsws_python as obsws
 from tally_controller import tally_light, tally_light_enums
 
-host = "192.168.200.2"
-port = 4455
-password = "123456"
-timeout = 3
-
 
 class OBS:
 
@@ -143,11 +138,17 @@ class OBS:
 
 
 def main():
+    #TODO: Reading Tally configuration and OBS credentials from external file
     tallies = [
         ("cam1", tally_light.Tally("192.168.200.11", 10373, 1)),
         ("cam2", tally_light.Tally("192.168.200.12", 10373, 2)),
         ("cam3", tally_light.Tally("192.168.200.13", 10373, 3)),
     ]
+
+    host = "192.168.200.2"
+    port = 4455
+    password = "123456"
+    timeout = 3
 
     obs = OBS(host, port, password, timeout, tallies)
 
