@@ -1,6 +1,4 @@
 import obsws_python as obsws
-
-# from obsws_python.error import OBSSDKTimeoutError
 from tally_controller import tally_light, tally_light_enums
 import time
 
@@ -58,6 +56,17 @@ class OBS:
         self._program_tally = self._get_current_program_tally()
         print("Connected 😄")
 
+    def isConnected(self) -> bool:
+        try:
+            self._cr.get_version()  # check if connected
+        except Exception:
+            print("Disconnected")
+            for tally in self._tallies:
+                tally[1].set_color(tally_light_enums.Color.OFF)
+
+            return False
+        return True
+
     def _get_current_program_tally(self) -> tuple[str, tally_light.Tally] | None:
         resp = self._cr.get_current_program_scene()
         scene_name = resp.scene_name
@@ -114,15 +123,13 @@ def main():
         ("cam3", tally_light.Tally("192.168.200.13", 10373, 3)),
     ]
 
-    x = OBS(host, port, password, timeout, tallies)
+    obs = OBS(host, port, password, timeout, tallies)
+
+    while True: #Check connection
+        if not obs.isConnected():
+            obs.connect()
+        time.sleep(30)
 
 
 if __name__ == "__main__":
     main()
-    while True:
-        time.sleep(30)
-        # try:
-        #     cr.get_current_program_scene()  # check if connected
-        # except OBSSDKError:
-        #     print("Disconnected")
-        #     main()
