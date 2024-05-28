@@ -46,10 +46,10 @@ class Tally:
         if self.enable_front_light:
             control = (int(color) << 2) | control  # Text Tally state
         control = (int(self.brightness) << 6) | control  # Brightness value
-        control = bytearray(control.to_bytes(2, "little"))
+        control_bin = bytearray(control.to_bytes(2, "little"))
 
-        self._send_UDP_package(control)
-        self._send_UDP_package(control)
+        self._send_UDP_package(control_bin)
+        self._send_UDP_package(control_bin)
 
     def _send_UDP_package(self, control: bytearray) -> None:
         package = (
@@ -75,4 +75,3 @@ class Tally:
     _FLAGS = bytearray([0])
     _SCREEN = bytearray([0, 0])
     _LENGTH = bytearray([0, 0])
-

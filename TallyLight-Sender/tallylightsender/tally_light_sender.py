@@ -1,6 +1,7 @@
+import time
+
 import obsws_python as obsws
 from tally_controller import tally_light, tally_light_enums
-import time
 
 host = "192.168.200.2"
 port = 4455
@@ -18,6 +19,15 @@ class OBS:
         conn_timeout: int,
         tallies: list[tuple[str, tally_light.Tally]],
     ) -> None:
+        """
+
+        Args:
+            host (str): IP Address of OBS
+            port (int): Port which Websocket listens on
+            password (str): OBS Websocket password
+            conn_timeout (int): Connection timeout
+            tallies (list[tuple[str, tally_light.Tally]]): List of tally lights
+        """
         self._host = host
         self._port = port
         self._password = password
@@ -27,6 +37,10 @@ class OBS:
         self.connect()
 
     def connect(self) -> None:
+        """Connect if disconnected
+
+        Method blocks program execution until connected
+        """
         print(f"Host: {self._host}:{self._port}")
         print("Connecting...")
 
@@ -68,6 +82,11 @@ class OBS:
         return True
 
     def _get_current_program_tally(self) -> tuple[str, tally_light.Tally] | None:
+        """Fetch current program scene from OSB and match it to tally
+
+        Returns:
+            tuple[str, tally_light.Tally] | None: Tally of None if cannot match
+        """
         resp = self._cr.get_current_program_scene()
         scene_name = resp.scene_name
 
@@ -77,6 +96,11 @@ class OBS:
         return None
 
     def _get_current_preview_tally(self) -> tuple[str, tally_light.Tally] | None:
+        """Fetch current preview scene from OSB and match it to tally
+
+        Returns:
+            tuple[str, tally_light.Tally] | None: Tally of None if cannot match
+        """
         resp = self._cr.get_current_preview_scene()
         scene_name = resp.scene_name
 
@@ -86,6 +110,7 @@ class OBS:
         return None
 
     def on_scene_transition_started(self, data):
+        """Callback handler"""
         print("Transition stared")
 
         tally = self._get_current_program_tally()
@@ -93,6 +118,7 @@ class OBS:
             tally[1].set_color(tally_light_enums.Color.RED)
 
     def on_scene_transition_ended(self, data):
+        """Callback handler"""
         print("Transition ended")
 
         tally = self._get_current_program_tally()
@@ -125,7 +151,7 @@ def main():
 
     obs = OBS(host, port, password, timeout, tallies)
 
-    while True: #Check connection
+    while True:  # Check connection
         if not obs.isConnected():
             obs.connect()
         time.sleep(30)
