@@ -1,10 +1,10 @@
 import socket
+
 from tally_controller.tally_light_enums import Brightness, Color
 
 
 class Tally:
-    """Tally Light representation
-    """
+    """Tally Light representation"""
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class Tally:
             f"Tally index: {int.from_bytes(self._index, 'little')}  Color: {self._color}"
         )
 
-        #prepare package
+        # prepare package
         control = int(color)  # RH Tally Lamp state
         if self._enable_front_light:
             control = (int(color) << 2) | control  # Text Tally state
