@@ -49,11 +49,11 @@ class OBS:
                     timeout=self._conn_timeout,
                 )
                 self._cr = obsws.ReqClient(
-                    host=host, port=port, password=password, timeout=timeout
+                    host=self._host, port=self._port, password=self._password, timeout=self._conn_timeout
                 )
 
             except Exception:
-                time.sleep(timeout)
+                time.sleep(self._conn_timeout)
             else:
                 connected = True
 
