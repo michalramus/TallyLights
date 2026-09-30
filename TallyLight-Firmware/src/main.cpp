@@ -84,6 +84,7 @@ void setup()
         LedDriver_setMode(LedDriver_LedModes::wifiNotConnected);
 
         WiFi.begin();
+        WiFi.setSleepMode(WIFI_NONE_SLEEP);
         Serial.print("Connecting to WiFi");
         while (WiFi.status() != WL_CONNECTED)
         {
